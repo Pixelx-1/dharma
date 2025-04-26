@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,23 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Custom app colors
+				'law-blue': {
+					DEFAULT: '#0A2342', // Dark navy blue
+					light: '#2CA5DE', // Light blue accent
+					muted: '#E5F2FC', // Very light blue background
+				},
+				'law-neutral': {
+					DEFAULT: '#F5F7FA', // Light background
+					dark: '#555B6E', // Dark text
+					muted: '#94979E', // Muted text
+				},
+				'law-accent': {
+					green: '#2D936C', // Success/online indicator
+					amber: '#F3A712', // Warning/pending indicator
+					red: '#E63946', // Error/alert indicator
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +101,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-slow': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.5' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-slow': 'pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+			},
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+				mono: ['JetBrains Mono', 'monospace'],
 			}
 		}
 	},
