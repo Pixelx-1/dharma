@@ -46,10 +46,12 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="flex items-center p-4">
         <div className="flex items-center gap-2">
-          <div className="bg-primary text-primary-foreground w-8 h-8 rounded-md flex items-center justify-center font-bold">
-            ECS
-          </div>
-          <span className="font-bold text-sidebar-foreground">Echo Case Scribe</span>
+          <img 
+            src="/lovable-uploads/3b3a145e-9db0-4610-9d97-5846716e2007.png" 
+            alt="Dharma Dashboard Logo" 
+            className="h-8 w-8 rounded-md"
+          />
+          <span className="font-bold text-sidebar-foreground">Dharma</span>
         </div>
         <SidebarTrigger className="ml-auto" />
       </SidebarHeader>

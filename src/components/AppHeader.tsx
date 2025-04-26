@@ -37,14 +37,14 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ isOffline }) => {
   };
   
   return (
-    <header className="border-b bg-background px-4 py-3">
+    <header className="border-b bg-dharma-muted px-4 py-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center md:w-72">
           <div className="relative w-full">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-dharma-dark" />
             <Input
               placeholder="Search cases..."
-              className="w-full bg-background pl-8 md:w-80"
+              className="w-full bg-white pl-8 md:w-80 border-dharma-light focus:ring-dharma-accent"
             />
           </div>
         </div>
@@ -54,7 +54,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ isOffline }) => {
             <Button 
               variant="outline" 
               size="sm" 
-              className="gap-1.5"
+              className="gap-1.5 border-dharma-light text-dharma-dark hover:bg-dharma-muted"
               onClick={handleSyncClick}
             >
               <ArrowDownCircle className="h-4 w-4" />
@@ -64,12 +64,12 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ isOffline }) => {
           
           {/* Offline indicator */}
           {isOffline ? (
-            <Badge variant="outline" className="gap-1 text-law-accent-amber border-law-accent-amber">
+            <Badge variant="outline" className="gap-1 text-dharma-accent border-dharma-accent">
               <CloudOff className="h-3.5 w-3.5" />
               <span>Offline</span>
             </Badge>
           ) : (
-            <Badge variant="outline" className="gap-1 text-law-accent-green border-law-accent-green">
+            <Badge variant="outline" className="gap-1 text-green-600 border-green-600">
               <CheckCircle className="h-3.5 w-3.5" />
               <span>Online</span>
             </Badge>
