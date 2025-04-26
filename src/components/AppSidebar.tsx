@@ -49,7 +49,7 @@ export function AppSidebar() {
           <img 
             src="/lovable-uploads/3b3a145e-9db0-4610-9d97-5846716e2007.png" 
             alt="Dharma Dashboard Logo" 
-            className="h-8 w-8 rounded-md"
+            className="h-12 w-12 rounded-md bg-white p-1 scale-90" 
           />
           <span className="font-bold text-sidebar-foreground">Dharma</span>
         </div>
