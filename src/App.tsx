@@ -4,7 +4,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Index from "./pages/Index";
+import AuthPage from "./pages/AuthPage";
 import TranscriptionPage from "./pages/TranscriptionPage";
 import FilesPage from "./pages/FilesPage";
 import FirPage from "./pages/FirPage";
@@ -15,20 +18,43 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/transcription" element={<TranscriptionPage />} />
-          <Route path="/files" element={<FilesPage />} />
-          <Route path="/fir" element={<FirPage />} />
-          <Route path="/videos" element={<VideosPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Index />
+              </ProtectedRoute>
+            } />
+            <Route path="/transcription" element={
+              <ProtectedRoute>
+                <TranscriptionPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/files" element={
+              <ProtectedRoute>
+                <FilesPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/fir" element={
+              <ProtectedRoute>
+                <FirPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/videos" element={
+              <ProtectedRoute>
+                <VideosPage />
+              </ProtectedRoute>
+            } />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
