@@ -1,8 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppSidebar } from '@/components/AppSidebar';
 import { AppHeader } from '@/components/AppHeader';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { Badge } from '@/components/ui/badge';
+import { Wifi, WifiOff } from 'lucide-react';
+import { toast } from "sonner";
+import { getPendingSyncCount } from '@/services/firService';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -10,10 +14,20 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isOffline, setIsOffline] = useState(false);
+  const [pendingChanges, setPendingChanges] = useState(0);
   
   // Monitor online/offline status
-  React.useEffect(() => {
-    const handleOnlineStatus = () => setIsOffline(!navigator.onLine);
+  useEffect(() => {
+    const handleOnlineStatus = () => {
+      const online = navigator.onLine;
+      setIsOffline(!online);
+      
+      if (online) {
+        toast.success("You're back online. Changes will sync automatically.");
+      } else {
+        toast.warning("You're offline. Changes will be saved locally.");
+      }
+    };
     
     window.addEventListener('online', handleOnlineStatus);
     window.addEventListener('offline', handleOnlineStatus);
@@ -25,6 +39,21 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       window.removeEventListener('online', handleOnlineStatus);
       window.removeEventListener('offline', handleOnlineStatus);
     };
+  }, []);
+  
+  // Check for pending changes periodically
+  useEffect(() => {
+    const checkPendingChanges = () => {
+      setPendingChanges(getPendingSyncCount());
+    };
+    
+    // Check immediately
+    checkPendingChanges();
+    
+    // Set up interval to check periodically
+    const interval = setInterval(checkPendingChanges, 10000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -38,8 +67,26 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           </main>
           <footer className="px-4 py-2 border-t flex items-center justify-between text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
-              <div className={`status-indicator ${isOffline ? 'status-offline' : 'status-online'}`}></div>
-              <span>{isOffline ? 'Offline Mode' : 'Online'}</span>
+              <div className={`h-2 w-2 rounded-full ${isOffline ? 'bg-red-500' : 'bg-green-500'}`}></div>
+              <span className="flex items-center gap-1">
+                {isOffline ? (
+                  <>
+                    <WifiOff className="h-3 w-3" />
+                    Offline Mode
+                  </>
+                ) : (
+                  <>
+                    <Wifi className="h-3 w-3" />
+                    Online
+                  </>
+                )}
+              </span>
+              
+              {pendingChanges > 0 && (
+                <Badge variant="outline" className="text-xs">
+                  {pendingChanges} pending {pendingChanges === 1 ? 'change' : 'changes'}
+                </Badge>
+              )}
             </div>
             <div>Echo Case Scribe v1.0.0</div>
           </footer>
