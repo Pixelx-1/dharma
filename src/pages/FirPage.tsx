@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom'; 
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Plus, FileUp, FileCheck, Search, Wifi, WifiOff, Loader, Check } from 'lucide-react';
+import { FileText, Plus, FileUp, FileCheck, Search, Wifi, WifiOff, Loader, Check, Eye } from 'lucide-react';
 import { createFIR, getOfficerFIRs, getPendingSyncCount, forceSyncFIRs, FIR } from '@/services/firService';
 import { toast } from "sonner";
 import { Timestamp } from 'firebase/firestore';
@@ -32,6 +32,7 @@ const formatDate = (dateValue: any): string => {
 
 const FirPage = () => {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [pendingSyncCount, setPendingSyncCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -103,6 +104,11 @@ const FirPage = () => {
     
     loadOfficerFIRs();
   }, [currentUser]);
+
+  // View FIR details
+  const viewFirDetails = (firId: string) => {
+    navigate(`/fir/${firId}`);
+  };
 
   // Handle force sync
   const handleForceSync = async () => {
@@ -464,10 +470,21 @@ const FirPage = () => {
                                   </Badge>
                                 </td>
                                 <td className="p-4 align-middle">
-                                  <Button variant="ghost" size="sm" className="gap-1.5">
-                                    <FileCheck className="h-4 w-4" />
-                                    <span>Review</span>
-                                  </Button>
+                                  <div className="flex items-center gap-1">
+                                    <Button 
+                                      variant="ghost" 
+                                      size="sm" 
+                                      className="gap-1.5"
+                                      onClick={() => viewFirDetails(fir.id || '')}
+                                    >
+                                      <Eye className="h-4 w-4" />
+                                      <span>View</span>
+                                    </Button>
+                                    <Button variant="ghost" size="sm" className="gap-1.5">
+                                      <FileCheck className="h-4 w-4" />
+                                      <span>Review</span>
+                                    </Button>
+                                  </div>
                                 </td>
                               </tr>
                             ))
@@ -548,8 +565,13 @@ const FirPage = () => {
                                   </Badge>
                                 </td>
                                 <td className="p-4 align-middle">
-                                  <Button variant="ghost" size="sm" className="gap-1.5">
-                                    <FileText className="h-4 w-4" />
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    className="gap-1.5"
+                                    onClick={() => viewFirDetails(fir.id || '')}
+                                  >
+                                    <Eye className="h-4 w-4" />
                                     <span>View</span>
                                   </Button>
                                 </td>

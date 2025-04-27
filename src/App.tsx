@@ -11,6 +11,7 @@ import AuthPage from "./pages/AuthPage";
 import TranscriptionPage from "./pages/TranscriptionPage";
 import FilesPage from "./pages/FilesPage";
 import FirPage from "./pages/FirPage";
+import FirViewPage from "./pages/FirViewPage";
 import VideosPage from "./pages/VideosPage";
 import NotFound from "./pages/NotFound";
 
@@ -43,6 +44,11 @@ const App = () => (
             <Route path="/fir" element={
               <ProtectedRoute>
                 <FirPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/fir/:firId" element={
+              <ProtectedRoute>
+                <FirViewPage />
               </ProtectedRoute>
             } />
             <Route path="/videos" element={

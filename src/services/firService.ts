@@ -1,4 +1,3 @@
-
 import { 
   collection, 
   addDoc, 
@@ -13,9 +12,9 @@ import {
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { firestore, storage } from '@/lib/firebase';
+import { firestore } from '@/lib/firebase';
 import offlineService from './offlineService';
+import { uploadMedia } from './mediaService';
 
 export interface FIR {
   id?: string;
@@ -247,26 +246,12 @@ export const uploadEvidenceFiles = async (
   try {
     // If offline, store file references for later upload
     if (!navigator.onLine) {
-      // In a real implementation, we would store files in IndexedDB
-      // For this demo, we'll just show a message
       throw new Error("Cannot upload files while offline. Files will be uploaded when connection is restored.");
     }
     
     const uploadPromises = files.map(async (file) => {
-      const fileRef = ref(storage, `firs/${firId}/${file.name}`);
-      
-      // Set metadata for the file to include owner information
-      const metadata = {
-        customMetadata: {
-          ownerEmail: userId
-        }
-      };
-      
-      // Upload the file
-      await uploadBytes(fileRef, file, metadata);
-      
-      // Get the download URL
-      const downloadURL = await getDownloadURL(fileRef);
+      // Use mediaService to upload each file
+      const downloadURL = await uploadMedia(`firs/${firId}`, file, userId);
       
       return {
         name: file.name,
@@ -290,6 +275,15 @@ export const uploadEvidenceFiles = async (
           ...uploadedFiles.map(file => file.url)
         ],
         updatedAt: serverTimestamp()
+      });
+      
+      // Create an audit log entry for evidence upload
+      await addDoc(collection(firestore, 'auditLogs'), {
+        firId,
+        userId,
+        action: 'uploaded_evidence',
+        timestamp: serverTimestamp(),
+        details: `Uploaded ${uploadedFiles.length} files`
       });
     }
     
