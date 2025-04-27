@@ -13,7 +13,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileText, Plus, FileUp, FileCheck, Search, Wifi, WifiOff, Loader, Check } from 'lucide-react';
 import { createFIR, getOfficerFIRs, getPendingSyncCount, forceSyncFIRs, FIR } from '@/services/firService';
 import { toast } from "sonner";
-import { Timestamp } from 'firebase/firestore'; // Add Timestamp import
+import { Timestamp } from 'firebase/firestore';
+
+// Helper function to format dates consistently
+const formatDate = (dateValue: any): string => {
+  if (!dateValue) return 'Pending...';
+  
+  if (dateValue instanceof Timestamp) {
+    return new Date(dateValue.seconds * 1000).toLocaleDateString();
+  } else if (dateValue instanceof Date) {
+    return dateValue.toLocaleDateString();
+  } else if (typeof dateValue === 'string') {
+    return new Date(dateValue).toLocaleDateString();
+  } else {
+    return 'Invalid date';
+  }
+};
 
 const FirPage = () => {
   const { currentUser } = useAuth();
@@ -438,11 +453,7 @@ const FirPage = () => {
                                 <td className="p-4 align-middle">{fir.incidentType}</td>
                                 <td className="p-4 align-middle">{fir.officerName}</td>
                                 <td className="p-4 align-middle">
-                                  {fir.createdAt instanceof Timestamp 
-                                    ? new Date(fir.createdAt.seconds * 1000).toLocaleDateString() 
-                                    : fir.createdAt instanceof Date 
-                                      ? fir.createdAt.toLocaleDateString() 
-                                      : 'Pending...'}
+                                  {formatDate(fir.createdAt)}
                                 </td>
                                 <td className="p-4 align-middle">
                                   <Badge variant={fir.status === 'Awaiting Approval' ? 'default' : 'outline'}>
@@ -529,11 +540,7 @@ const FirPage = () => {
                                 <td className="p-4 align-middle">{fir.incidentType}</td>
                                 <td className="p-4 align-middle">{fir.officerName}</td>
                                 <td className="p-4 align-middle">
-                                  {fir.createdAt instanceof Timestamp 
-                                    ? new Date(fir.createdAt.seconds * 1000).toLocaleDateString() 
-                                    : fir.createdAt instanceof Date 
-                                      ? fir.createdAt.toLocaleDateString() 
-                                      : 'Unknown'}
+                                  {formatDate(fir.createdAt)}
                                 </td>
                                 <td className="p-4 align-middle">
                                   <Badge variant="secondary">
