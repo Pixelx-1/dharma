@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileText, Plus, FileUp, FileCheck, Search, Wifi, WifiOff, Loader, Check } from 'lucide-react';
 import { createFIR, getOfficerFIRs, getPendingSyncCount, forceSyncFIRs, FIR } from '@/services/firService';
 import { toast } from "sonner";
+import { Timestamp } from 'firebase/firestore'; // Add Timestamp import
 
 const FirPage = () => {
   const { currentUser } = useAuth();
@@ -175,7 +176,7 @@ const FirPage = () => {
   const NetworkStatus = () => (
     <div className="flex items-center gap-2 text-sm">
       {isOnline ? (
-        <Badge variant="success" className="flex items-center gap-1">
+        <Badge variant="default" className="flex items-center gap-1">
           <Wifi className="h-3.5 w-3.5" />
           <span>Online</span>
         </Badge>
