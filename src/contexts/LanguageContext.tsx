@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { toast } from "sonner";
 
 // Define all supported languages
 export const supportedLanguages = [
@@ -20,7 +21,7 @@ export const supportedLanguages = [
   { code: 'kok', name: 'कोंकणी (Konkani)' },
 ];
 
-// Mock translations for demonstration
+// More comprehensive translations
 const translations: Record<string, Record<string, string>> = {
   'hi': {
     'Dashboard': 'डैशबोर्ड',
@@ -65,25 +66,76 @@ const translations: Record<string, Record<string, string>> = {
     'System': 'सिस्टम',
     'Authentication': 'प्रमाणीकरण',
     'Login / Signup': 'लॉगिन / साइनअप',
+    'Mode': 'मोड',
+    'pending': 'लंबित',
+    'change': 'परिवर्तन',
+    'changes': 'परिवर्तनों',
+    'this week': 'इस सप्ताह',
+    'of': 'का',
+    'from yesterday': 'कल से',
+    'total': 'कुल',
+    'ago': 'पहले',
+    'Last recorded': 'अंतिम रिकॉर्डेड',
+    'Language changed to': 'भाषा बदल गई',
+    'Active': 'सक्रिय',
+    'In Progress': 'प्रगति पर',
+    'Pending Review': 'समीक्षा के लिए लंबित',
+    'Logout': 'लॉग आउट',
   },
-  // Add more languages as needed for demonstration
   'bn': {
     'Dashboard': 'ড্যাশবোর্ড',
     'Welcome back': 'স্বাগতম',
+    'Active Cases': 'সক্রিয় কেস',
+    'Pending Approvals': 'অনুমোদন অপেক্ষারত',
+    'Total Recordings': 'মোট রেকর্ডিং',
+    'Storage Used': 'ব্যবহৃত স্টোরেজ',
     'FIR+': 'এফআইআর+',
-    // Add more translations for Bengali
+    'Officer': 'অফিসার',
+    'Online': 'অনলাইন',
+    'Offline': 'অফলাইন',
+    'Transcription': 'ট্রান্সক্রিপশন',
+    'Files': 'ফাইল',
+    'FIR Management': 'এফআইআর ব্যবস্থাপনা',
+    'Video Processing': 'ভিডিও প্রসেসিং',
+    'Settings': 'সেটিংস',
+    'My Cases': 'আমার কেসগুলি',
+    'Recent Activity': 'সাম্প্রতিক কার্যকলাপ',
+    'Mode': 'মোড',
+    'Main Navigation': 'প্রধান নেভিগেশন',
+    'System': 'সিস্টেম',
+    'Echo Case Scribe': 'ইকো কেস স্ক্রাইব',
+    'Language changed to': 'ভাষা পরিবর্তন করা হয়েছে',
   },
   'ta': {
     'Dashboard': 'டாஷ்போர்டு',
     'Welcome back': 'மீண்டும் வரவேற்கிறோம்',
+    'Active Cases': 'செயலில் உள்ள வழக்குகள்',
+    'Pending Approvals': 'நிலுவையில் உள்ள அங்கீகாரங்கள்',
+    'Total Recordings': 'மொத்த பதிவுகள்',
+    'Storage Used': 'பயன்படுத்தப்பட்ட சேமிப்பு',
     'FIR+': 'எஃப்ஐஆர்+',
-    // Add more translations for Tamil
+    'Officer': 'அதிகாரி',
+    'Online': 'ஆன்லைன்',
+    'Offline': 'ஆஃப்லைன்',
+    'Transcription': 'டிரான்ஸ்கிரிப்ஷன்',
+    'Files': 'கோப்புகள்',
+    'FIR Management': 'எஃப்ஐஆர் மேலாண்மை',
+    'Video Processing': 'வீடியோ செயலாக்கம்',
+    'Settings': 'அமைப்புகள்',
+    'Echo Case Scribe': 'எக்கோ கேஸ் ஸ்கிரைப்',
+    'Language changed to': 'மொழி மாற்றப்பட்டது',
   }
 };
 
-// Utility function to translate text
+// Improved utility function to translate text
 export const translateText = (text: string, language: string): string => {
-  if (language === 'en') return text;
+  if (language === 'en' || !text) return text;
+  
+  // Special case for numbers and dates - don't translate
+  if (/^\d+(\.\d+)?$/.test(text) || /^\d{1,2}:\d{2}$/.test(text)) {
+    return text;
+  }
+  
   return translations[language]?.[text] || text;
 };
 

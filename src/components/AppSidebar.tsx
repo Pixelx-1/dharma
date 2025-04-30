@@ -70,14 +70,14 @@ export function AppSidebar() {
         {currentUser ? (
           <>
             <SidebarGroup>
-              <SidebarGroupLabel className="text-black">{t('Main Navigation')}</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-black font-semibold">{t('Main Navigation')}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {menuItems.map((item) => (
                     <SidebarMenuItem key={item.path}>
                       <SidebarMenuButton 
                         asChild 
-                        className={`text-black hover:bg-police-mustard hover:text-black ${isActive(item.path) ? 'bg-police-mustard text-black' : ''}`}
+                        className={`text-black hover:bg-police-mustard hover:text-black ${isActive(item.path) ? 'bg-police-mustard text-black font-medium' : ''}`}
                       >
                         <Link to={item.path}>
                           <item.icon className="h-4 w-4" />
@@ -92,14 +92,14 @@ export function AppSidebar() {
             
             {systemItems.length > 0 && (
               <SidebarGroup>
-                <SidebarGroupLabel className="text-black">{t('System')}</SidebarGroupLabel>
+                <SidebarGroupLabel className="text-black font-semibold">{t('System')}</SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
                     {systemItems.map((item) => (
                       <SidebarMenuItem key={item.path}>
                         <SidebarMenuButton 
                           asChild 
-                          className={`text-black hover:bg-police-mustard hover:text-black ${isActive(item.path) ? 'bg-police-mustard text-black' : ''}`}
+                          className={`text-black hover:bg-police-mustard hover:text-black ${isActive(item.path) ? 'bg-police-mustard text-black font-medium' : ''}`}
                         >
                           <Link to={item.path}>
                             <item.icon className="h-4 w-4" />
@@ -115,7 +115,7 @@ export function AppSidebar() {
           </>
         ) : (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-black">{t('Authentication')}</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-black font-semibold">{t('Authentication')}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
@@ -139,11 +139,11 @@ export function AppSidebar() {
         <div className="px-3 py-2">
           {currentUser ? (
             <div className="space-y-2">
-              <div className="flex items-center gap-2 px-3 py-2 text-xs text-black/70">
+              <div className="flex items-center gap-2 px-3 py-2 text-xs text-black font-medium">
                 <User className="h-3 w-3" />
                 <span className="truncate">{currentUser.displayName || currentUser.email}</span>
               </div>
-              <SidebarMenuButton asChild className="w-full justify-start bg-police-accent hover:bg-police-accent/80 text-black">
+              <SidebarMenuButton asChild className="w-full justify-start bg-police-accent hover:bg-police-accent/80 text-black font-medium">
                 <button onClick={handleLogout}>
                   <LogOut className="h-4 w-4" />
                   <span>{t('Logout')}</span>

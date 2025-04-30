@@ -38,11 +38,11 @@
     --radius: 0.5rem;
 
     --sidebar-background: 55 67% 68%;
-    --sidebar-foreground: 240 10% 3.9%;
+    --sidebar-foreground: 0 0% 0%;
     --sidebar-primary: 55 30% 55%;
     --sidebar-primary-foreground: 0 0% 0%;
     --sidebar-accent: 55 40% 62%;
-    --sidebar-accent-foreground: 240 10% 3.9%;
+    --sidebar-accent-foreground: 0 0% 0%;
     --sidebar-border: 55 50% 60%;
     --sidebar-ring: 45 100% 50%;
   }
@@ -159,4 +159,19 @@
 
 .recording-waveform span:nth-child(5n) {
   animation-delay: 0.8s;
+}
+
+/* Improve text visibility on blue backgrounds */
+.bg-police-dark, 
+.bg-sidebar, 
+.bg-law-blue,
+.bg-dharma {
+  @apply text-white;
+}
+
+/* Ensure dropdown menus have proper background and text contrast */
+.dropdown-content,
+[role="menu"],
+[data-radix-popper-content-wrapper] {
+  @apply bg-background text-foreground border border-police-border;
 }

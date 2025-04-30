@@ -25,9 +25,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       setIsOffline(!online);
       
       if (online) {
-        toast.success("You're back online. Changes will sync automatically.");
+        toast.success(t("You're back online. Changes will sync automatically."));
       } else {
-        toast.warning("You're offline. Changes will be saved locally.");
+        toast.warning(t("You're offline. Changes will be saved locally."));
       }
     };
     
@@ -41,7 +41,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       window.removeEventListener('online', handleOnlineStatus);
       window.removeEventListener('offline', handleOnlineStatus);
     };
-  }, []);
+  }, [t]);
   
   // Check for pending changes periodically
   useEffect(() => {
@@ -70,7 +70,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <footer className="px-4 py-2 border-t flex items-center justify-between text-xs text-muted-foreground border-police-border">
             <div className="flex items-center gap-2">
               <div className={`h-2 w-2 rounded-full ${isOffline ? 'bg-red-500' : 'bg-green-500'}`}></div>
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 font-medium">
                 {isOffline ? (
                   <>
                     <WifiOff className="h-3 w-3" />
@@ -90,7 +90,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                 </Badge>
               )}
             </div>
-            <div>{t("Echo Case Scribe")} v1.0.0</div>
+            <div className="font-medium">{t("Echo Case Scribe")} v1.0.0</div>
           </footer>
         </div>
       </div>
