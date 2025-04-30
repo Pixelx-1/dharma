@@ -117,7 +117,6 @@ const translations: Record<string, Record<string, string>> = {
     'Save as Draft': 'ड्राफ्ट के रूप में सहेजें',
     'Creating...': 'बना रहा है...',
     'Create FIR': 'एफआईआर बनाएं',
-    'Pending Approvals': 'लंबित अनुमोदन',
     'FIRs awaiting review and approval': 'समीक्षा और अनुमोदन के लिए लंबित एफआईआर',
     'FIR ID': 'एफआईआर आईडी',
     'Case #': 'केस #',
@@ -151,7 +150,11 @@ const translations: Record<string, Record<string, string>> = {
     'You\'re offline. Please connect to the internet to sync changes.': 'आप ऑफलाइन हैं। परिवर्तनों को सिंक करने के लिए कृपया इंटरनेट से कनेक्ट करें।',
     'Pending...': 'लंबित...',
     'Invalid date': 'अमान्य तिथि',
-    'Unknown Officer': 'अज्ञात अधिकारी'
+    'Unknown Officer': 'अज्ञात अधिकारी',
+    'Evidence Files': 'सबूत के रूप में फ़ाइलें',
+    'No evidence files have been uploaded for this FIR': 'इस एफआईआर के लिए कोई सबूत फ़ाइल अपलोड नहीं की गई है',
+    'Upload Evidence Files': 'सबूत फ़ाइलें अपलोड करें',
+    'File downloaded successfully': 'फ़ाइल सफलतापूर्वक डाउनलोड की गई'
   },
   'bn': {
     'Dashboard': 'ড্যাশবোর্ড',
@@ -186,7 +189,8 @@ const translations: Record<string, Record<string, string>> = {
     'will be saved offline and synced when connection is restored': 'অফলাইনে সংরক্ষণ করা হবে এবং সংযোগ পুনরুদ্ধার হলে সিঙ্ক করা হবে',
     'Case Number': 'কেস নম্বর',
     'Pending Review': 'পর্যালোচনা অপেক্ষারত',
-    'Pending...': 'অপেক্ষারত...'
+    'Pending...': 'অপেক্ষারত...',
+    'Evidence Files': 'প্রমাণ ফাইল'
   },
   'ta': {
     'Dashboard': 'டாஷ்போர்டு',
@@ -210,7 +214,8 @@ const translations: Record<string, Record<string, string>> = {
     'Create and manage First Information Reports': 'முதல் தகவல் அறிக்கைகளை உருவாக்கவும் மற்றும் நிர்வகிக்கவும்',
     'Create FIR': 'எஃப்ஐஆர் உருவாக்கு',
     'Pending Review': 'நிலுவையில் உள்ள மதிப்பாய்வு',
-    'Pending...': 'நிலுவையில்...'
+    'Pending...': 'நிலுவையில்...',
+    'Evidence Files': 'ஆதாரக் கோப்புகள்'
   }
 };
 

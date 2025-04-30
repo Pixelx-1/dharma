@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { downloadFile } from '@/services/mediaService';
@@ -8,6 +9,7 @@ import EvidenceFileItem from './fir-evidence/EvidenceFileItem';
 import UploadEvidenceDialog from './fir-evidence/UploadEvidenceDialog';
 import { Button } from '@/components/ui/button';
 import { FileUp } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface FirEvidenceSectionProps {
   firId: string;
@@ -24,6 +26,7 @@ const FirEvidenceSection = ({
 }: FirEvidenceSectionProps) => {
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<{ url: string; name: string } | null>(null);
+  const { t } = useLanguage();
   
   const handleFileUpload = async (files: File[]) => {
     try {
@@ -38,7 +41,7 @@ const FirEvidenceSection = ({
   const handleDownload = async (fileUrl: string, fileName: string) => {
     try {
       await downloadFile(fileUrl, fileName);
-      toast.success("File downloaded successfully");
+      toast.success(t("File downloaded successfully"));
     } catch (error) {
       toast.error(`Failed to download file: ${(error as Error).message}`);
     }
@@ -48,7 +51,7 @@ const FirEvidenceSection = ({
     <>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Evidence Files</CardTitle>
+          <CardTitle>{t("Evidence Files")}</CardTitle>
           <UploadEvidenceDialog 
             isOpen={isUploadDialogOpen}
             onOpenChange={setIsUploadDialogOpen}
@@ -71,7 +74,7 @@ const FirEvidenceSection = ({
             </div>
           ) : (
             <div className="text-center py-8 text-muted-foreground">
-              <p>No evidence files have been uploaded for this FIR</p>
+              <p>{t("No evidence files have been uploaded for this FIR")}</p>
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -79,7 +82,7 @@ const FirEvidenceSection = ({
                 onClick={() => setIsUploadDialogOpen(true)}
               >
                 <FileUp className="h-3.5 w-3.5" />
-                <span>Upload Evidence Files</span>
+                <span>{t("Upload Evidence Files")}</span>
               </Button>
             </div>
           )}
