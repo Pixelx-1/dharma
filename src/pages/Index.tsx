@@ -1,78 +1,96 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/layouts/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Mic, File, FileCheck, Clock, Calendar, ArrowUpRight, Folder, FolderOpen } from 'lucide-react';
+import { Mic, File, FileCheck, Clock, Calendar, ArrowUpRight, Folder, FolderOpen, PlusCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Index = () => {
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const { t } = useLanguage();
+  
+  const handleFirPlusClick = () => {
+    navigate('/fir');
+  };
+  
+  const getUserDisplayName = () => {
+    if (currentUser?.displayName) {
+      return currentUser.displayName;
+    }
+    return currentUser?.email?.split('@')[0] || 'User';
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, Officer John Doe</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('Dashboard')}</h1>
+            <p className="text-muted-foreground">{t('Welcome back')}, {t('Officer')} {getUserDisplayName()}</p>
           </div>
-          <Button className="gap-2">
-            <Mic className="h-4 w-4" />
-            <span>New Recording</span>
+          <Button className="gap-2 bg-police-mustard text-black hover:bg-police-accent" onClick={handleFirPlusClick}>
+            <PlusCircle className="h-4 w-4" />
+            <span>FIR+</span>
           </Button>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+          <Card className="border-police-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Active Cases</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('Active Cases')}</CardTitle>
               <File className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">12</div>
-              <p className="text-xs text-muted-foreground">+2 this week</p>
+              <p className="text-xs text-muted-foreground">+2 {t('this week')}</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-police-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Pending Approvals</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('Pending Approvals')}</CardTitle>
               <FileCheck className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">4</div>
-              <p className="text-xs text-muted-foreground">-1 from yesterday</p>
+              <p className="text-xs text-muted-foreground">-1 {t('from yesterday')}</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-police-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Recordings</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('Total Recordings')}</CardTitle>
               <Mic className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">145</div>
-              <p className="text-xs text-muted-foreground">Last recorded 2h ago</p>
+              <p className="text-xs text-muted-foreground">{t('Last recorded')} 2h {t('ago')}</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-police-border">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Storage Used</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('Storage Used')}</CardTitle>
               <Folder className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">8.2 GB</div>
-              <p className="text-xs text-muted-foreground">of 50 GB total</p>
+              <p className="text-xs text-muted-foreground">{t('of')} 50 GB {t('total')}</p>
             </CardContent>
           </Card>
         </div>
         
         <Tabs defaultValue="recent">
           <div className="flex items-center justify-between">
-            <TabsList>
-              <TabsTrigger value="recent">Recent Activity</TabsTrigger>
-              <TabsTrigger value="cases">My Cases</TabsTrigger>
+            <TabsList className="bg-police-light">
+              <TabsTrigger value="recent">{t('Recent Activity')}</TabsTrigger>
+              <TabsTrigger value="cases">{t('My Cases')}</TabsTrigger>
             </TabsList>
-            <Button variant="ghost" size="sm" className="gap-1">
-              <span>View All</span>
+            <Button variant="ghost" size="sm" className="gap-1 text-police-dark hover:bg-police-light">
+              <span>{t('View All')}</span>
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Button>
           </div>
@@ -80,11 +98,11 @@ const Index = () => {
           <TabsContent value="recent" className="space-y-4 pt-4">
             <div className="grid gap-4 md:grid-cols-2">
               {/* Recent Transcriptions */}
-              <Card>
+              <Card className="border-police-border">
                 <CardHeader className="pb-3">
-                  <CardTitle>Recent Transcriptions</CardTitle>
+                  <CardTitle>{t('Recent Transcriptions')}</CardTitle>
                   <CardDescription>
-                    Your latest audio recordings and transcriptions
+                    {t('Your latest audio recordings and transcriptions')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 pt-0">
@@ -101,8 +119,8 @@ const Index = () => {
                           </p>
                         </div>
                       </div>
-                      <Badge variant={i === 0 ? "default" : i === 1 ? "outline" : "secondary"}>
-                        {i === 0 ? 'New' : i === 1 ? 'Processing' : 'Complete'}
+                      <Badge variant={i === 0 ? "default" : i === 1 ? "outline" : "secondary"} className={i === 0 ? "bg-police-mustard text-black hover:bg-police-mustard/90" : ""}>
+                        {i === 0 ? t('New') : i === 1 ? t('Processing') : t('Complete')}
                       </Badge>
                     </div>
                   ))}
@@ -110,11 +128,11 @@ const Index = () => {
               </Card>
               
               {/* Pending Tasks */}
-              <Card>
+              <Card className="border-police-border">
                 <CardHeader className="pb-3">
-                  <CardTitle>Pending Tasks</CardTitle>
+                  <CardTitle>{t('Pending Tasks')}</CardTitle>
                   <CardDescription>
-                    Tasks requiring your attention
+                    {t('Tasks requiring your attention')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 pt-0">
@@ -128,7 +146,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground">Due today</p>
                       </div>
                     </div>
-                    <Badge variant="destructive">Urgent</Badge>
+                    <Badge variant="destructive">{t('Urgent')}</Badge>
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -141,7 +159,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground">Due tomorrow</p>
                       </div>
                     </div>
-                    <Badge variant="secondary">Medium</Badge>
+                    <Badge variant="secondary">{t('Medium')}</Badge>
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -154,7 +172,7 @@ const Index = () => {
                         <p className="text-xs text-muted-foreground">Next week</p>
                       </div>
                     </div>
-                    <Badge variant="outline">Scheduled</Badge>
+                    <Badge variant="outline">{t('Scheduled')}</Badge>
                   </div>
                 </CardContent>
               </Card>
@@ -162,11 +180,11 @@ const Index = () => {
           </TabsContent>
           
           <TabsContent value="cases" className="pt-4">
-            <Card>
+            <Card className="border-police-border">
               <CardHeader className="pb-3">
-                <CardTitle>My Active Cases</CardTitle>
+                <CardTitle>{t('My Active Cases')}</CardTitle>
                 <CardDescription>
-                  Cases currently assigned to you
+                  {t('Cases currently assigned to you')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 pt-0">
@@ -179,7 +197,7 @@ const Index = () => {
                   <div key={i} className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-sm text-law-blue">{item.id}</p>
+                        <p className="font-bold text-sm text-police-dark">{item.id}</p>
                         <p className="font-medium">{item.title}</p>
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -190,8 +208,8 @@ const Index = () => {
                       item.status === 'Active' ? "default" : 
                       item.status === 'In Progress' ? "outline" : 
                       "secondary"
-                    }>
-                      {item.status}
+                    } className={item.status === 'Active' ? "bg-police-mustard text-black hover:bg-police-mustard/90" : ""}>
+                      {t(item.status)}
                     </Badge>
                   </div>
                 ))}

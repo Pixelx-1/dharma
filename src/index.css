@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
@@ -6,7 +7,7 @@
 
 @layer base {
   :root {
-    --background: 210 33% 98%;
+    --background: 55 67% 96%;
     --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
@@ -15,35 +16,35 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 212 100% 35%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 55 67% 68%;
+    --primary-foreground: 240 10% 3.9%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 55 52% 80%;
+    --secondary-foreground: 240 10% 3.9%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 55 55% 92%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 55 59% 50%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 212 100% 35%;
+    --border: 55 59% 65%;
+    --input: 55 59% 65%;
+    --ring: 55 60% 45%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 223 78% 15%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 212 100% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 223 30% 22%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 223 30% 25%;
-    --sidebar-ring: 212 100% 55%;
+    --sidebar-background: 55 67% 68%;
+    --sidebar-foreground: 240 10% 3.9%;
+    --sidebar-primary: 55 30% 55%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 55 40% 62%;
+    --sidebar-accent-foreground: 240 10% 3.9%;
+    --sidebar-border: 55 50% 60%;
+    --sidebar-ring: 45 100% 50%;
   }
 
   .dark {
@@ -56,33 +57,33 @@
     --popover: 223 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 212 100% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 55 67% 60%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 217 33% 17%;
+    --secondary: 55 30% 40%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217 33% 17%;
+    --muted: 55 30% 30%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 217 33% 17%;
+    --accent: 55 30% 45%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 212 100% 55%;
+    --border: 55 30% 40%;
+    --input: 55 30% 40%;
+    --ring: 55 60% 50%;
     
-    --sidebar-background: 223 47% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 212 100% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 223 30% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 223 30% 20%;
-    --sidebar-ring: 212 100% 55%;
+    --sidebar-background: 55 67% 60%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 55 60% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 55 30% 45%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 55 30% 40%;
+    --sidebar-ring: 55 60% 50%;
   }
 }
 
@@ -127,7 +128,7 @@
 }
 
 .file-icon {
-  @apply flex items-center justify-center h-10 w-10 rounded bg-law-blue-muted text-law-blue;
+  @apply flex items-center justify-center h-10 w-10 rounded bg-police-light text-police-dark;
 }
 
 .recording-waveform {
@@ -135,7 +136,7 @@
 }
 
 .recording-waveform span {
-  @apply bg-law-blue-light w-1 rounded-t;
+  @apply bg-police-mustard w-1 rounded-t;
   animation: waveform 1.2s ease-in-out infinite;
 }
 

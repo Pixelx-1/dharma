@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -83,6 +84,15 @@ export default {
           muted: '#E5F2FC',
           accent: '#D35400',
           dark: '#1B4F72'
+        },
+        'police': {
+          khaki: '#F0E68C',  // Khaki color
+          mustard: '#BDB76B', // Darker khaki/mustard
+          dark: '#000080',    // Navy blue
+          gold: '#D4AF37',    // Badge gold color
+          accent: '#F3A712',  // Accent amber color
+          light: '#FFFCDF',   // Very light khaki
+          border: '#D6C963'   // Border khaki
         }
       },
       borderRadius: {

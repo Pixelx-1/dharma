@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Wifi, WifiOff } from 'lucide-react';
 import { toast } from "sonner";
 import { getPendingSyncCount } from '@/services/firService';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [isOffline, setIsOffline] = useState(false);
   const [pendingChanges, setPendingChanges] = useState(0);
+  const { t } = useLanguage();
   
   // Monitor online/offline status
   useEffect(() => {
@@ -65,30 +67,30 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           <main className="flex-1 p-4 md:p-6 overflow-y-auto">
             {children}
           </main>
-          <footer className="px-4 py-2 border-t flex items-center justify-between text-xs text-muted-foreground">
+          <footer className="px-4 py-2 border-t flex items-center justify-between text-xs text-muted-foreground border-police-border">
             <div className="flex items-center gap-2">
               <div className={`h-2 w-2 rounded-full ${isOffline ? 'bg-red-500' : 'bg-green-500'}`}></div>
               <span className="flex items-center gap-1">
                 {isOffline ? (
                   <>
                     <WifiOff className="h-3 w-3" />
-                    Offline Mode
+                    {t("Offline")} {t("Mode")}
                   </>
                 ) : (
                   <>
                     <Wifi className="h-3 w-3" />
-                    Online
+                    {t("Online")}
                   </>
                 )}
               </span>
               
               {pendingChanges > 0 && (
                 <Badge variant="outline" className="text-xs">
-                  {pendingChanges} pending {pendingChanges === 1 ? 'change' : 'changes'}
+                  {pendingChanges} {t("pending")} {pendingChanges === 1 ? t('change') : t('changes')}
                 </Badge>
               )}
             </div>
-            <div>Echo Case Scribe v1.0.0</div>
+            <div>{t("Echo Case Scribe")} v1.0.0</div>
           </footer>
         </div>
       </div>
