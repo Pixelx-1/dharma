@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom'; 
@@ -14,6 +15,7 @@ import { FileText, Plus, FileUp, FileCheck, Search, Wifi, WifiOff, Loader, Check
 import { createFIR, getOfficerFIRs, getPendingSyncCount, forceSyncFIRs, FIR } from '@/services/firService';
 import { toast } from "sonner";
 import { Timestamp } from 'firebase/firestore';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Helper function to format dates consistently
 const formatDate = (dateValue: any): string => {
@@ -38,6 +40,7 @@ const FirPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [officerFIRs, setOfficerFIRs] = useState<FIR[]>([]);
+  const { t } = useLanguage();
 
   // Form state
   const [caseNumber, setCaseNumber] = useState<string>('');
@@ -54,9 +57,9 @@ const FirPage = () => {
     const handleOnlineStatus = () => {
       setIsOnline(navigator.onLine);
       if (navigator.onLine) {
-        toast.success("You're back online. Changes will sync automatically.");
+        toast.success(t("You're back online. Changes will sync automatically."));
       } else {
-        toast.warning("You're offline. Changes will be saved locally.");
+        toast.warning(t("You're offline. Changes will be saved locally."));
       }
     };
     
@@ -67,7 +70,7 @@ const FirPage = () => {
       window.removeEventListener('online', handleOnlineStatus);
       window.removeEventListener('offline', handleOnlineStatus);
     };
-  }, []);
+  }, [t]);
 
   // Check for pending operations periodically
   useEffect(() => {
@@ -96,14 +99,14 @@ const FirPage = () => {
         setOfficerFIRs(firs);
       } catch (error) {
         console.error("Error loading FIRs:", error);
-        toast.error("Failed to load your FIRs");
+        toast.error(t("Failed to load your FIRs"));
       } finally {
         setIsLoading(false);
       }
     };
     
     loadOfficerFIRs();
-  }, [currentUser]);
+  }, [currentUser, t]);
 
   // View FIR details
   const viewFirDetails = (firId: string) => {
@@ -113,7 +116,7 @@ const FirPage = () => {
   // Handle force sync
   const handleForceSync = async () => {
     if (!isOnline) {
-      toast.error("You're offline. Please connect to the internet to sync changes.");
+      toast.error(t("You're offline. Please connect to the internet to sync changes."));
       return;
     }
     
@@ -130,10 +133,10 @@ const FirPage = () => {
       // Update pending count
       setPendingSyncCount(getPendingSyncCount());
       
-      toast.success("Sync completed successfully!");
+      toast.success(t("Sync completed successfully!"));
     } catch (error) {
       console.error("Error syncing:", error);
-      toast.error("Failed to sync changes");
+      toast.error(t("Failed to sync changes"));
     } finally {
       setIsSyncing(false);
     }
@@ -142,13 +145,13 @@ const FirPage = () => {
   // Handle FIR creation
   const handleCreateFIR = async () => {
     if (!currentUser) {
-      toast.error("You must be logged in to create an FIR");
+      toast.error(t("You must be logged in to create an FIR"));
       return;
     }
     
     // Validate form fields
     if (!caseNumber || !incidentDate || !incidentType || !location || !complainantName) {
-      toast.error("Please fill in all required fields");
+      toast.error(t("Please fill in all required fields"));
       return;
     }
     
@@ -164,13 +167,13 @@ const FirPage = () => {
         incidentDetails,
         evidenceDescription,
         officerId: currentUser.uid,
-        officerName: currentUser.displayName || 'Unknown Officer',
+        officerName: currentUser.displayName || t('Unknown Officer'),
         status: 'Pending Review' as const
       };
       
       await createFIR(firData);
       
-      toast.success("FIR created successfully" + (!isOnline ? " (will sync when online)" : ""));
+      toast.success(t("FIR created successfully") + (!isOnline ? " (" + t("will sync when online") + ")" : ""));
       
       // Clear form
       setCaseNumber('');
@@ -187,7 +190,7 @@ const FirPage = () => {
       setOfficerFIRs(firs);
     } catch (error) {
       console.error("Error creating FIR:", error);
-      toast.error("Failed to create FIR: " + (error as Error).message);
+      toast.error(t("Failed to create FIR") + ": " + (error as Error).message);
     } finally {
       setIsLoading(false);
     }
@@ -199,19 +202,19 @@ const FirPage = () => {
       {isOnline ? (
         <Badge variant="default" className="flex items-center gap-1">
           <Wifi className="h-3.5 w-3.5" />
-          <span>Online</span>
+          <span>{t('Online')}</span>
         </Badge>
       ) : (
         <Badge variant="destructive" className="flex items-center gap-1">
           <WifiOff className="h-3.5 w-3.5" />
-          <span>Offline</span>
+          <span>{t('Offline')}</span>
         </Badge>
       )}
       
       {pendingSyncCount > 0 && (
         <Badge variant="secondary" className="flex items-center gap-1">
           <Loader className="h-3.5 w-3.5 animate-spin" />
-          <span>{pendingSyncCount} pending {pendingSyncCount === 1 ? 'change' : 'changes'}</span>
+          <span>{pendingSyncCount} {t('pending')} {pendingSyncCount === 1 ? t('change') : t('changes')}</span>
         </Badge>
       )}
       
@@ -226,12 +229,12 @@ const FirPage = () => {
           {isSyncing ? (
             <>
               <Loader className="mr-1 h-3.5 w-3.5 animate-spin" />
-              <span>Syncing...</span>
+              <span>{t('Syncing...')}</span>
             </>
           ) : (
             <>
               <Check className="mr-1 h-3.5 w-3.5" />
-              <span>Force Sync</span>
+              <span>{t('Force Sync')}</span>
             </>
           )}
         </Button>
@@ -244,42 +247,42 @@ const FirPage = () => {
       <div className="space-y-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">FIR Management</h1>
-            <p className="text-muted-foreground">Create and manage First Information Reports</p>
+            <h1 className="text-3xl font-bold tracking-tight">{t('FIR Management')}</h1>
+            <p className="text-muted-foreground">{t('Create and manage First Information Reports')}</p>
           </div>
           <NetworkStatus />
         </div>
 
         <Tabs defaultValue="create">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="create">Create FIR</TabsTrigger>
-            <TabsTrigger value="pending">Pending Approval</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
+            <TabsTrigger value="create">{t('Create FIR')}</TabsTrigger>
+            <TabsTrigger value="pending">{t('Pending Approval')}</TabsTrigger>
+            <TabsTrigger value="history">{t('History')}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="create" className="pt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Create New FIR</CardTitle>
+                <CardTitle>{t('Create New FIR')}</CardTitle>
                 <CardDescription>
-                  Fill out the form below to create a new First Information Report
-                  {!isOnline && " (will be saved offline and synced when connection is restored)"}
+                  {t('Fill out the form below to create a new First Information Report')}
+                  {!isOnline && " (" + t("will be saved offline and synced when connection is restored") + ")"}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="case-number">Case Number</Label>
+                    <Label htmlFor="case-number">{t('Case Number')}</Label>
                     <Input 
                       id="case-number" 
-                      placeholder="Enter case number" 
+                      placeholder={t("Enter case number")}
                       value={caseNumber}
                       onChange={(e) => setCaseNumber(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="incident-date">Incident Date & Time</Label>
+                    <Label htmlFor="incident-date">{t('Incident Date & Time')}</Label>
                     <Input 
                       id="incident-date" 
                       type="datetime-local" 
@@ -292,25 +295,25 @@ const FirPage = () => {
                 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="incident-type">Incident Type</Label>
+                    <Label htmlFor="incident-type">{t('Incident Type')}</Label>
                     <Select value={incidentType} onValueChange={setIncidentType}>
                       <SelectTrigger id="incident-type">
-                        <SelectValue placeholder="Select incident type" />
+                        <SelectValue placeholder={t("Select incident type")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="theft">Theft</SelectItem>
-                        <SelectItem value="assault">Assault</SelectItem>
-                        <SelectItem value="burglary">Burglary</SelectItem>
-                        <SelectItem value="vandalism">Vandalism</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="theft">{t('Theft')}</SelectItem>
+                        <SelectItem value="assault">{t('Assault')}</SelectItem>
+                        <SelectItem value="burglary">{t('Burglary')}</SelectItem>
+                        <SelectItem value="vandalism">{t('Vandalism')}</SelectItem>
+                        <SelectItem value="other">{t('Other')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="location">Incident Location</Label>
+                    <Label htmlFor="location">{t('Incident Location')}</Label>
                     <Input 
                       id="location" 
-                      placeholder="Enter incident location" 
+                      placeholder={t("Enter incident location")}
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       required
@@ -320,23 +323,23 @@ const FirPage = () => {
                 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="transcription">Associate Transcription</Label>
+                    <Label htmlFor="transcription">{t('Associate Transcription')}</Label>
                     <Button 
                       variant="outline" 
                       size="sm" 
                       className="gap-1.5" 
                       disabled={!isOnline}
-                      title={!isOnline ? "Not available in offline mode" : "Browse transcriptions"}
+                      title={!isOnline ? t("Not available in offline mode") : t("Browse transcriptions")}
                     >
                       <FileUp className="h-3.5 w-3.5" />
-                      <span>Browse</span>
+                      <span>{t('Browse')}</span>
                     </Button>
                   </div>
                   <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="transcription"
-                      placeholder="Search for a transcription..."
+                      placeholder={t("Search for a transcription...")}
                       className="pl-8"
                       disabled={!isOnline}
                     />
@@ -345,20 +348,20 @@ const FirPage = () => {
                 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="complainant-name">Complainant Name</Label>
+                    <Label htmlFor="complainant-name">{t('Complainant Name')}</Label>
                     <Input 
                       id="complainant-name" 
-                      placeholder="Enter complainant name" 
+                      placeholder={t("Enter complainant name")}
                       value={complainantName}
                       onChange={(e) => setComplainantName(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="complainant-contact">Complainant Contact</Label>
+                    <Label htmlFor="complainant-contact">{t('Complainant Contact')}</Label>
                     <Input 
                       id="complainant-contact" 
-                      placeholder="Enter contact number" 
+                      placeholder={t("Enter contact number")}
                       value={complainantContact}
                       onChange={(e) => setComplainantContact(e.target.value)}
                     />
@@ -366,10 +369,10 @@ const FirPage = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="incident-details">Incident Details</Label>
+                  <Label htmlFor="incident-details">{t('Incident Details')}</Label>
                   <Textarea
                     id="incident-details"
-                    placeholder="Describe the incident in detail..."
+                    placeholder={t("Describe the incident in detail...")}
                     className="min-h-32"
                     value={incidentDetails}
                     onChange={(e) => setIncidentDetails(e.target.value)}
@@ -377,10 +380,10 @@ const FirPage = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="evidences">Evidence Description</Label>
+                  <Label htmlFor="evidences">{t('Evidence Description')}</Label>
                   <Textarea
                     id="evidences"
-                    placeholder="List any evidence collected..."
+                    placeholder={t("List any evidence collected...")}
                     value={evidenceDescription}
                     onChange={(e) => setEvidenceDescription(e.target.value)}
                   />
@@ -391,7 +394,7 @@ const FirPage = () => {
                   variant="outline" 
                   disabled={isLoading}
                 >
-                  Save as Draft
+                  {t('Save as Draft')}
                 </Button>
                 <Button 
                   onClick={handleCreateFIR}
@@ -400,12 +403,12 @@ const FirPage = () => {
                   {isLoading ? (
                     <>
                       <Loader className="mr-1 h-4 w-4 animate-spin" />
-                      <span>Creating...</span>
+                      <span>{t('Creating...')}</span>
                     </>
                   ) : (
                     <>
                       <Plus className="mr-1 h-4 w-4" />
-                      <span>Create FIR</span>
+                      <span>{t('Create FIR')}</span>
                     </>
                   )}
                 </Button>
@@ -416,9 +419,9 @@ const FirPage = () => {
           <TabsContent value="pending" className="pt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Pending Approvals</CardTitle>
+                <CardTitle>{t('Pending Approvals')}</CardTitle>
                 <CardDescription>
-                  FIRs awaiting review and approval
+                  {t('FIRs awaiting review and approval')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -427,13 +430,13 @@ const FirPage = () => {
                     <table className="w-full caption-bottom text-sm">
                       <thead>
                         <tr className="border-b bg-muted/50">
-                          <th className="h-12 px-4 text-left font-medium">FIR ID</th>
-                          <th className="h-12 px-4 text-left font-medium">Case #</th>
-                          <th className="h-12 px-4 text-left font-medium">Incident Type</th>
-                          <th className="h-12 px-4 text-left font-medium">Submitted By</th>
-                          <th className="h-12 px-4 text-left font-medium">Date</th>
-                          <th className="h-12 px-4 text-left font-medium">Status</th>
-                          <th className="h-12 px-4 text-left font-medium">Actions</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('FIR ID')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Case #')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Incident Type')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Submitted By')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Date')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Status')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -441,7 +444,7 @@ const FirPage = () => {
                           <tr>
                             <td colSpan={7} className="py-6 text-center">
                               <Loader className="mx-auto h-6 w-6 animate-spin" />
-                              <p className="mt-2 text-sm text-muted-foreground">Loading FIRs...</p>
+                              <p className="mt-2 text-sm text-muted-foreground">{t('Loading FIRs...')}</p>
                             </td>
                           </tr>
                         ) : officerFIRs.filter(fir => fir.status === 'Pending Review' || fir.status === 'Awaiting Approval').length > 0 ? (
@@ -450,20 +453,20 @@ const FirPage = () => {
                             .map((fir) => (
                               <tr key={fir.id} className="border-b">
                                 <td className="p-4 align-middle font-medium">
-                                  {fir.id?.startsWith('temp_') ? 'Pending...' : fir.id}
+                                  {fir.id?.startsWith('temp_') ? t('Pending...') : fir.id}
                                   {fir.isSyncing && (
                                     <Loader className="ml-1 inline h-3 w-3 animate-spin" />
                                   )}
                                 </td>
                                 <td className="p-4 align-middle text-law-blue">{fir.caseNumber}</td>
-                                <td className="p-4 align-middle">{fir.incidentType}</td>
+                                <td className="p-4 align-middle">{t(fir.incidentType)}</td>
                                 <td className="p-4 align-middle">{fir.officerName}</td>
                                 <td className="p-4 align-middle">
                                   {formatDate(fir.createdAt)}
                                 </td>
                                 <td className="p-4 align-middle">
                                   <Badge variant={fir.status === 'Awaiting Approval' ? 'default' : 'outline'}>
-                                    {fir.status}
+                                    {t(fir.status)}
                                     {fir.isSyncing && (
                                       <Loader className="ml-1 inline h-3 w-3 animate-spin" />
                                     )}
@@ -478,11 +481,11 @@ const FirPage = () => {
                                       onClick={() => viewFirDetails(fir.id || '')}
                                     >
                                       <Eye className="h-4 w-4" />
-                                      <span>View</span>
+                                      <span>{t('View')}</span>
                                     </Button>
                                     <Button variant="ghost" size="sm" className="gap-1.5">
                                       <FileCheck className="h-4 w-4" />
-                                      <span>Review</span>
+                                      <span>{t('Review')}</span>
                                     </Button>
                                   </div>
                                 </td>
@@ -491,7 +494,7 @@ const FirPage = () => {
                         ) : (
                           <tr>
                             <td colSpan={7} className="py-6 text-center">
-                              <p className="text-sm text-muted-foreground">No pending FIRs found</p>
+                              <p className="text-sm text-muted-foreground">{t('No pending FIRs found')}</p>
                             </td>
                           </tr>
                         )}
@@ -506,16 +509,16 @@ const FirPage = () => {
           <TabsContent value="history" className="pt-6">
             <Card>
               <CardHeader>
-                <CardTitle>FIR History</CardTitle>
+                <CardTitle>{t('FIR History')}</CardTitle>
                 <CardDescription>
-                  Previously filed and approved FIRs
+                  {t('Previously filed and approved FIRs')}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Search FIRs by ID, case number, or details..."
+                    placeholder={t("Search FIRs by ID, case number, or details...")}
                     className="pl-8 w-full md:max-w-sm"
                   />
                 </div>
@@ -525,13 +528,13 @@ const FirPage = () => {
                     <table className="w-full caption-bottom text-sm">
                       <thead>
                         <tr className="border-b bg-muted/50">
-                          <th className="h-12 px-4 text-left font-medium">FIR ID</th>
-                          <th className="h-12 px-4 text-left font-medium">Case #</th>
-                          <th className="h-12 px-4 text-left font-medium">Incident Type</th>
-                          <th className="h-12 px-4 text-left font-medium">Submitted By</th>
-                          <th className="h-12 px-4 text-left font-medium">Filed Date</th>
-                          <th className="h-12 px-4 text-left font-medium">Status</th>
-                          <th className="h-12 px-4 text-left font-medium">Actions</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('FIR ID')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Case #')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Incident Type')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Submitted By')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Filed Date')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Status')}</th>
+                          <th className="h-12 px-4 text-left font-medium">{t('Actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -539,7 +542,7 @@ const FirPage = () => {
                           <tr>
                             <td colSpan={7} className="py-6 text-center">
                               <Loader className="mx-auto h-6 w-6 animate-spin" />
-                              <p className="mt-2 text-sm text-muted-foreground">Loading FIRs...</p>
+                              <p className="mt-2 text-sm text-muted-foreground">{t('Loading FIRs...')}</p>
                             </td>
                           </tr>
                         ) : officerFIRs.filter(fir => fir.status === 'Approved' || fir.status === 'Rejected').length > 0 ? (
@@ -554,14 +557,14 @@ const FirPage = () => {
                                   )}
                                 </td>
                                 <td className="p-4 align-middle text-law-blue">{fir.caseNumber}</td>
-                                <td className="p-4 align-middle">{fir.incidentType}</td>
+                                <td className="p-4 align-middle">{t(fir.incidentType)}</td>
                                 <td className="p-4 align-middle">{fir.officerName}</td>
                                 <td className="p-4 align-middle">
                                   {formatDate(fir.createdAt)}
                                 </td>
                                 <td className="p-4 align-middle">
                                   <Badge variant="secondary">
-                                    {fir.status}
+                                    {t(fir.status)}
                                   </Badge>
                                 </td>
                                 <td className="p-4 align-middle">
@@ -572,7 +575,7 @@ const FirPage = () => {
                                     onClick={() => viewFirDetails(fir.id || '')}
                                   >
                                     <Eye className="h-4 w-4" />
-                                    <span>View</span>
+                                    <span>{t('View')}</span>
                                   </Button>
                                 </td>
                               </tr>
@@ -580,7 +583,7 @@ const FirPage = () => {
                         ) : (
                           <tr>
                             <td colSpan={7} className="py-6 text-center">
-                              <p className="text-sm text-muted-foreground">No approved or rejected FIRs found</p>
+                              <p className="text-sm text-muted-foreground">{t('No approved or rejected FIRs found')}</p>
                             </td>
                           </tr>
                         )}
