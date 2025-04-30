@@ -116,7 +116,6 @@ const translations: Record<string, Record<string, string>> = {
     'List any evidence collected...': 'एकत्रित किए गए किसी भी साक्ष्य की सूची बनाएं...',
     'Save as Draft': 'ड्राफ्ट के रूप में सहेजें',
     'Creating...': 'बना रहा है...',
-    'Create FIR': 'एफआईआर बनाएं',
     'FIRs awaiting review and approval': 'समीक्षा और अनुमोदन के लिए लंबित एफआईआर',
     'FIR ID': 'एफआईआर आईडी',
     'Case #': 'केस #',

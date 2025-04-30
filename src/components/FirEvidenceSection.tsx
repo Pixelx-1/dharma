@@ -34,7 +34,7 @@ const FirEvidenceSection = ({
       setIsUploadDialogOpen(false);
       onFilesUploaded();
     } catch (error) {
-      toast.error(`Failed to upload: ${(error as Error).message}`);
+      toast.error(`${t('Failed to upload')}: ${(error as Error).message}`);
     }
   };
 
@@ -43,7 +43,7 @@ const FirEvidenceSection = ({
       await downloadFile(fileUrl, fileName);
       toast.success(t("File downloaded successfully"));
     } catch (error) {
-      toast.error(`Failed to download file: ${(error as Error).message}`);
+      toast.error(`${t('Failed to download file')}: ${(error as Error).message}`);
     }
   };
   
